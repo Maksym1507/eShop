@@ -4,6 +4,7 @@ using Catalog.Host.Models.Dtos;
 using Catalog.Host.Models.Responses;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Abstractions;
+using Infrastructure.Services.Abstractions;
 
 namespace Catalog.Host.Services
 {
@@ -23,11 +24,17 @@ namespace Catalog.Host.Services
             _mapper = mapper;
         }
 
-        public async Task<PaginatedItemsResponse<CatalogItemDto>> GetCatalogItemsAsync(int pageSize, int pageIndex)
+        public async Task<PaginatedItemsResponse<CatalogItemDto>?> GetCatalogItemsAsync(int pageSize, int pageIndex)
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var result = await _catalogItemRepository.GetByPageAsync(pageIndex, pageSize);
+
+                if (result == null)
+                {
+                    return null;
+                }
+
                 return new PaginatedItemsResponse<CatalogItemDto>()
                 {
                     Count = result.TotalCount,
@@ -38,21 +45,31 @@ namespace Catalog.Host.Services
             });
         }
 
-        public async Task<CatalogItemDto> GetCatalogItemById(int id)
+        public async Task<CatalogItemDto?> GetCatalogItemByIdAsync(int id)
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var result = await _catalogItemRepository.GetByIdAsync(id);
 
+                if (result == null)
+                {
+                    return null;
+                }
+
                 return _mapper.Map<CatalogItemDto>(result);
             });
         }
 
-        public async Task<ItemsResponse<CatalogItemDto>> GetCatalogItemsByBrandAsync(string brand)
+        public async Task<ItemsResponse<CatalogItemDto>?> GetCatalogItemsByBrandAsync(string brand)
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var result = await _catalogItemRepository.GetByBrandAsync(brand);
+
+                if (result == null)
+                {
+                    return null;
+                }
 
                 return new ItemsResponse<CatalogItemDto>()
                 {
@@ -61,11 +78,16 @@ namespace Catalog.Host.Services
             });
         }
 
-        public async Task<ItemsResponse<CatalogItemDto>> GetCatalogItemsByTypeAsync(string type)
+        public async Task<ItemsResponse<CatalogItemDto>?> GetCatalogItemsByTypeAsync(string type)
         {
             return await ExecuteSafeAsync(async () =>
             {
                 var result = await _catalogItemRepository.GetByTypeAsync(type);
+
+                if (result == null)
+                {
+                    return null;
+                }
 
                 return new ItemsResponse<CatalogItemDto>()
                 {

@@ -4,6 +4,7 @@ using Catalog.Host.Repositories;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services;
 using Catalog.Host.Services.Abstractions;
+using Infrastructure.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Host

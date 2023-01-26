@@ -1,4 +1,4 @@
-﻿using Catalog.Host.Services.Abstractions;
+﻿using Infrastructure.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 

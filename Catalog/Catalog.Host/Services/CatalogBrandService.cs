@@ -4,6 +4,7 @@ using Catalog.Host.Models.Dtos;
 using Catalog.Host.Models.Responses;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Abstractions;
+using Infrastructure.Services.Abstractions;
 
 namespace Catalog.Host.Services
 {
@@ -23,7 +24,7 @@ namespace Catalog.Host.Services
             _mapper = mapper;
         }
 
-        public async Task<ItemsResponse<CatalogBrandDto>> GetCatalogBrands()
+        public async Task<ItemsResponse<CatalogBrandDto>> GetCatalogBrandsAsync()
         {
             return await ExecuteSafeAsync(async () =>
             {

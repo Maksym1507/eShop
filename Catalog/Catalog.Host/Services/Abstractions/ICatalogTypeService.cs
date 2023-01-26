@@ -5,7 +5,7 @@ namespace Catalog.Host.Services.Abstractions
 {
     public interface ICatalogTypeService
     {
-        Task<ItemsResponse<CatalogTypeDto>> GetCatalogTypes();
+        Task<ItemsResponse<CatalogTypeDto>> GetCatalogTypesAsync();
 
         Task<int?> AddAsync(string type);
 

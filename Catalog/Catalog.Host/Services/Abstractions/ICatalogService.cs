@@ -5,12 +5,12 @@ namespace Catalog.Host.Services.Abstractions
 {
     public interface ICatalogService
     {
-        Task<PaginatedItemsResponse<CatalogItemDto>> GetCatalogItemsAsync(int pageSize, int pageIndex);
+        Task<PaginatedItemsResponse<CatalogItemDto>?> GetCatalogItemsAsync(int pageSize, int pageIndex);
 
-        Task<ItemsResponse<CatalogItemDto>> GetCatalogItemsByBrandAsync(string brand);
+        Task<ItemsResponse<CatalogItemDto>?> GetCatalogItemsByBrandAsync(string brand);
 
-        Task<ItemsResponse<CatalogItemDto>> GetCatalogItemsByTypeAsync(string type);
+        Task<ItemsResponse<CatalogItemDto>?> GetCatalogItemsByTypeAsync(string type);
 
-        Task<CatalogItemDto> GetCatalogItemById(int id);
+        Task<CatalogItemDto?> GetCatalogItemByIdAsync(int id);
     }
 }

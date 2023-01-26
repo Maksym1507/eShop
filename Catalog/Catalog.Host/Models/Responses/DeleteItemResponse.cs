@@ -2,6 +2,6 @@
 {
     public class DeleteItemResponse<T>
     {
-        public T IsDeleted { get; set; } = default(T)!;
+        public T IsDeleted { get; set; } = default(T) !;
     }
 }

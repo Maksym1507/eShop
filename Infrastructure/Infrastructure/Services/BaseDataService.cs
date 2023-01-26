@@ -1,5 +1,4 @@
-﻿using Catalog.Host.Services.Abstractions;
-using Microsoft.EntityFrameworkCore;
+﻿using Infrastructure.Services.Abstractions;
 
 namespace Catalog.Host.Services
 {
@@ -56,7 +55,7 @@ namespace Catalog.Host.Services
                 _logger.LogError(ex, $"transaction is rollbacked");
             }
 
-            return default(TResult)!;
+            return default(TResult) !;
         }
     }
 }

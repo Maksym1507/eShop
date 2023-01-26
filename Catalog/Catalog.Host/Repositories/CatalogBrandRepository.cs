@@ -1,7 +1,7 @@
 ﻿using Catalog.Host.Data;
 using Catalog.Host.Data.Entities;
 using Catalog.Host.Repositories.Abstractions;
-using Catalog.Host.Services.Abstractions;
+using Infrastructure.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Host.Repositories

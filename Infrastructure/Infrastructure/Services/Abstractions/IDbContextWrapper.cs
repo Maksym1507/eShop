@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Catalog.Host.Services.Abstractions
+namespace Infrastructure.Services.Abstractions
 {
     public interface IDbContextWrapper<T>
         where T : DbContext

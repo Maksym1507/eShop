@@ -57,7 +57,7 @@ namespace Catalog.Host.Controllers
         [ProducesResponseType(typeof(CatalogItemDto), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ItemById(int id)
         {
-            var result = await _catalogService.GetCatalogItemById(id);
+            var result = await _catalogService.GetCatalogItemByIdAsync(id);
             return Ok(result);
         }
 
@@ -65,7 +65,7 @@ namespace Catalog.Host.Controllers
         [ProducesResponseType(typeof(ItemsResponse<CatalogBrandDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Brands()
         {
-            var result = await _catalogBrandService.GetCatalogBrands();
+            var result = await _catalogBrandService.GetCatalogBrandsAsync();
             return Ok(result);
         }
 
@@ -73,7 +73,7 @@ namespace Catalog.Host.Controllers
         [ProducesResponseType(typeof(ItemsResponse<CatalogTypeDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Types()
         {
-            var result = await _catalogTypeService.GetCatalogTypes();
+            var result = await _catalogTypeService.GetCatalogTypesAsync();
             return Ok(result);
         }
     }

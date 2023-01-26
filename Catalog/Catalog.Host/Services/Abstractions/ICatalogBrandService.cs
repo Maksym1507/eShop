@@ -5,7 +5,7 @@ namespace Catalog.Host.Services.Abstractions
 {
     public interface ICatalogBrandService
     {
-        Task<ItemsResponse<CatalogBrandDto>> GetCatalogBrands();
+        Task<ItemsResponse<CatalogBrandDto>> GetCatalogBrandsAsync();
 
         Task<int?> AddAsync(string brand);
 
