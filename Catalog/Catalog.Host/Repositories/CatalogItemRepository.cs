@@ -1,8 +1,6 @@
 ﻿using Catalog.Host.Data;
 using Catalog.Host.Data.Entities;
 using Catalog.Host.Repositories.Abstractions;
-using Infrastructure.Services.Abstractions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Host.Repositories
 {
@@ -19,15 +17,26 @@ namespace Catalog.Host.Repositories
             _logger = logger;
         }
 
-        public async Task<PaginatedItems<CatalogItem>> GetByPageAsync(int pageIndex, int pageSize)
+        public async Task<PaginatedItems<CatalogItem>> GetByPageAsync(int pageIndex, int pageSize, int? brandFilter, int? typeFilter)
         {
+            IQueryable<CatalogItem> query = _dbContext.CatalogItems;
+
+            if (brandFilter.HasValue)
+            {
+                query = query.Where(w => w.CatalogBrandId == brandFilter.Value);
+            }
+
+            if (typeFilter.HasValue)
+            {
+                query = query.Where(w => w.CatalogTypeId == typeFilter.Value);
+            }
+
             var totalItems = await _dbContext.CatalogItems
             .LongCountAsync();
 
-            var itemsOnPage = await _dbContext.CatalogItems
+            var itemsOnPage = await query.OrderBy(c => c.Title)
                 .Include(i => i.CatalogBrand)
                 .Include(i => i.CatalogType)
-                .OrderBy(c => c.Title)
                 .Skip(pageSize * pageIndex)
                 .Take(pageSize)
                 .ToListAsync();

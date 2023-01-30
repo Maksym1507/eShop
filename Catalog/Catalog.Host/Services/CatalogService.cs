@@ -1,10 +1,9 @@
-﻿using AutoMapper;
-using Catalog.Host.Data;
+﻿using Catalog.Host.Data;
 using Catalog.Host.Models.Dtos;
+using Catalog.Host.Models.Enums;
 using Catalog.Host.Models.Responses;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services.Abstractions;
-using Infrastructure.Services.Abstractions;
 
 namespace Catalog.Host.Services
 {
@@ -24,11 +23,27 @@ namespace Catalog.Host.Services
             _mapper = mapper;
         }
 
-        public async Task<PaginatedItemsResponse<CatalogItemDto>?> GetCatalogItemsAsync(int pageSize, int pageIndex)
+        public async Task<PaginatedItemsResponse<CatalogItemDto>?> GetCatalogItemsAsync(int pageSize, int pageIndex, Dictionary<CatalogTypeFilter, int>? filters)
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var result = await _catalogItemRepository.GetByPageAsync(pageIndex, pageSize);
+                int? brandFilter = null;
+                int? typeFilter = null;
+
+                if (filters != null)
+                {
+                    if (filters.TryGetValue(CatalogTypeFilter.Brand, out var brand))
+                    {
+                        brandFilter = brand;
+                    }
+
+                    if (filters.TryGetValue(CatalogTypeFilter.Type, out var type))
+                    {
+                        typeFilter = type;
+                    }
+                }
+
+                var result = await _catalogItemRepository.GetByPageAsync(pageIndex, pageSize, brandFilter, typeFilter);
 
                 if (result == null)
                 {

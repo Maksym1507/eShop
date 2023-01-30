@@ -10,7 +10,7 @@ namespace Catalog.Host.Controllers
 {
     [ApiController]
     [Route(ComponentDefaults.DefaultRoute)]
-    public class CatalogBrandController : Controller
+    public class CatalogBrandController : ControllerBase
     {
         private readonly ICatalogBrandService _catalogBrandService;
         private readonly ILogger<CatalogBrandController> _logger;

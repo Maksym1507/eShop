@@ -5,7 +5,7 @@ namespace Catalog.Host.Repositories.Abstractions
 {
     public interface ICatalogItemRepository
     {
-        Task<PaginatedItems<CatalogItem>> GetByPageAsync(int pageIndex, int pageSize);
+        Task<PaginatedItems<CatalogItem>> GetByPageAsync(int pageIndex, int pageSize, int? brandFilter, int? typeFilter);
 
         Task<CatalogItem?> GetByIdAsync(int id);
 
