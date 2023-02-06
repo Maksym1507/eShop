@@ -1,6 +1,6 @@
 ﻿namespace MVC.ViewModels
 {
-    public class Catalog
+    public class PaginatedCatalogItems
     {
         public int PageIndex { get; set; }
 

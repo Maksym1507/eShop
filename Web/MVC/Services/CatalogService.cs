@@ -18,8 +18,18 @@ namespace MVC.Services
             _logger = logger;
         }
 
-        public async Task<Catalog> GetCatalogItems(int page, int take, int? brand, int? type)
+        public async Task<PaginatedCatalogItems> GetCatalogItems(int page, int take, int? brand, int? type)
         {
+            await _httpClient.SendAsync<object, object>(
+                $"{_settings.Value.BasketUrl}/anonymous",
+                HttpMethod.Post,
+                null);
+
+            await _httpClient.SendAsync<object, object>(
+                $"{_settings.Value.BasketUrl}/defended",
+                HttpMethod.Post,
+                null);
+
             var filters = new Dictionary<CatalogTypeFilter, int>();
 
             if (brand.HasValue)
@@ -32,7 +42,7 @@ namespace MVC.Services
                 filters.Add(CatalogTypeFilter.Type, type.Value);
             }
 
-            var result = await _httpClient.SendAsync<Catalog, PaginatedItemsRequest<CatalogTypeFilter>>(
+            var result = await _httpClient.SendAsync<PaginatedCatalogItems, PaginatedItemsRequest<CatalogTypeFilter>>(
                 $"{_settings.Value.CatalogUrl}/items",
                 HttpMethod.Post,
                 new PaginatedItemsRequest<CatalogTypeFilter>()

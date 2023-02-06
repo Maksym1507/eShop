@@ -9,11 +9,29 @@ services:
     environment:
        - ASPNETCORE_ENVIRONMENT=Development
        - ASPNETCORE_URLS=http://+:5000
-       - ConnectionString=server=host.docker.internal;port=5433;database=catalog;uid=postgres;password=postgres;
+       - ConnectionString=server=www.alevelwebsite.com;port=5433;database=catalog;uid=postgres;password=postgres;
+       - Authorization__Authority=http://www.alevelwebsite.com:5002
+       - PathBase=http://www.alevelwebsite.com:5000
     depends_on:
       - postgres
     ports:
       - 5000:5000
+  basket.api:
+    container_name: lde.basket.api
+    build:
+      context: .
+      dockerfile: Basket/Basket.Host/Dockerfile
+    environment:
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ASPNETCORE_URLS=http://+:5003
+       - ConnectionString=server=www.alevelwebsite.com;port=5433;database=catalog;uid=postgres;password=postgres;
+       - Authorization__Authority=http://www.alevelwebsite.com:5002
+       - PathBase=http://www.alevelwebsite.com:5003
+       - CatalogItemUrl=http://host.docker.internal:5000/api/v1/catalogitem
+    depends_on:
+      - postgres
+    ports:
+      - 5003:5003
   web.mvc:
     container_name: lde.web.mvc
     build:
@@ -23,10 +41,31 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5001
       - CatalogUrl=http://host.docker.internal:5000/api/v1/catalogbff
+      - BasketUrl=http://host.docker.internal:5003/api/v1/basketbff
+      - Authorization__Authority=http://www.alevelwebsite.com:5002
+      - IdentityUrl=http://www.alevelwebsite.com:5002
+      - CallBackUrl=http://www.alevelwebsite.com/
+      - RedirectUri=http://www.alevelwebsite.com/signin-oidc
     depends_on:
       - catalog.api
+      - identityserver
     ports:
       - 5001:5001
+  identityserver:
+    container_name: lde.identityserver
+    build:
+      context: .
+      dockerfile: IdentityServer/IdentityServer/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5002
+      - MvcUrl=http://www.alevelwebsite.com
+      - CatalogApi=http://www.alevelwebsite.com:5000
+      - BasketApi=http://www.alevelwebsite.com:5003
+    ports:
+      - 5002:5002
+    ports:
+      - 5002:5002
   nginx:
     image: nginx
     container_name: lde.nginx
