@@ -1,11 +1,14 @@
+using Basket.Host.Services;
 using Catalog.Host.Configurations;
 using Catalog.Host.Data;
 using Catalog.Host.Repositories;
 using Catalog.Host.Repositories.Abstractions;
 using Catalog.Host.Services;
 using Catalog.Host.Services.Abstractions;
+using Infrastructure.Configurations;
 using Infrastructure.Extensions;
 using Infrastructure.Filters;
+using Infrastructure.RateLimit.Middlewares;
 using Microsoft.OpenApi.Models;
 
 namespace Catalog.Host
@@ -57,6 +60,8 @@ namespace Catalog.Host
 
             builder.AddConfiguration();
             builder.Services.Configure<CatalogConfig>(configuration);
+            builder.Services.Configure<RedisConfig>(
+                builder.Configuration.GetSection("Redis"));
 
             builder.Services.AddAuthorization(configuration);
 
@@ -69,6 +74,9 @@ namespace Catalog.Host
             builder.Services.AddTransient<ICatalogService, CatalogService>();
             builder.Services.AddTransient<ICatalogItemRepository, CatalogItemRepository>();
             builder.Services.AddTransient<ICatalogItemService, CatalogItemService>();
+            builder.Services.AddTransient<IJsonSerializer, JsonSerializer>();
+            builder.Services.AddTransient<IRedisCacheConnectionService, RedisCacheConnectionService>();
+            builder.Services.AddTransient<ICacheService, CacheService>();
 
             builder.Services.AddDbContextFactory<ApplicationDbContext>(opts => opts.UseNpgsql(configuration["ConnectionString"]));
             builder.Services.AddScoped<IDbContextWrapper<ApplicationDbContext>, DbContextWrapper<ApplicationDbContext>>();
@@ -99,6 +107,8 @@ namespace Catalog.Host
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<RateLimitMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

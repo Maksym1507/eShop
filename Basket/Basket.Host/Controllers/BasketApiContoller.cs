@@ -1,8 +1,5 @@
 ﻿using Infrastructure.Identity;
-using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using Basket.Host.Models.Requests;
 using Basket.Host.Models.Response;
 using Basket.Host.Services.Abstractions;

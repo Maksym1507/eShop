@@ -17,6 +17,7 @@ public class AuthorizeCheckOperationFilter : IOperationFilter
             return;
         }
 
+        operation.Responses.TryAdd("429", new OpenApiResponse { Description = "Too Many Requests" });
         operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
         operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
 

@@ -1,12 +1,10 @@
 using Basket.Host.Configurations;
 using Basket.Host.Services;
 using Basket.Host.Services.Abstractions;
+using Infrastructure.Configurations;
 using Infrastructure.Extensions;
 using Infrastructure.Filters;
-using Infrastructure.Services;
-using Infrastructure.Services.Abstractions;
 using Microsoft.OpenApi.Models;
-using System.Net.Http;
 
 namespace Basket.Host
 {
@@ -18,14 +16,11 @@ namespace Basket.Host
 
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
             })
             .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
-
 
             builder.Services.AddSwaggerGen(options =>
             {
@@ -61,12 +56,18 @@ namespace Basket.Host
 
             builder.AddConfiguration();
             builder.Services.Configure<BasketConfig>(configuration);
+            builder.Services.Configure<RedisConfig>(
+                builder.Configuration.GetSection("Redis"));
 
             builder.Services.AddAuthorization(configuration);
 
             builder.Services.AddHttpClient();
             builder.Services.AddTransient<IInternalHttpClientService, InternalHttpClientService>();
             builder.Services.AddTransient<IBasketApiService, BasketApiService>();
+            builder.Services.AddTransient<IJsonSerializer, JsonSerializer>();
+            builder.Services.AddTransient<IRedisCacheConnectionService, RedisCacheConnectionService>();
+            builder.Services.AddTransient<ICacheService, CacheService>();
+            builder.Services.AddTransient<IBasketService, BasketService>();
 
             builder.Services.AddCors(options =>
             {

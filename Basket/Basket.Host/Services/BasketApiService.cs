@@ -26,7 +26,8 @@ namespace Basket.Host.Services
         public async Task<AddItemResponse<int?>> AddCatalogItemAsync(CreateProductRequest request)
         {
             var result = await _httpClient.SendAsync<AddItemResponse<int?>, CreateProductRequest>(
-                $"{_config.CatalogItemUrl}/add", HttpMethod.Post,
+                $"{_config.CatalogItemUrl}/add",
+                HttpMethod.Post,
                 request);
 
             _logger.LogInformation($"{result}");
